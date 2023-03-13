@@ -6,14 +6,16 @@ import { GlobalStyles } from "../../constants/styles";
 //utils
 import { getFormattedDate } from "../../util/date";
 
-function ExpenseItem({ amount, date, description }) {
+function ExpenseItem({ id, amount, date, description }) {
   const [valueFormattedWithSymbol, valueFormattedWithoutSymbol, symbol] =
     formatCurrency({ amount: amount, code: "ZAR" });
 
     const navigation = useNavigation();
 
   function expensePressHandler() {
-    navigation.navigate('MangeExpense');
+    navigation.navigate('MangeExpense', {
+      expenseId: id
+    });
   }
 
   return (
