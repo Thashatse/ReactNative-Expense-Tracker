@@ -9,6 +9,8 @@ function renderExpenseItem(ItemData) {
 }
 
 function ExpensesList({ expenses }) {
+console.log(expenses.length);
+
   return (
     <FlatList
       data={expenses}

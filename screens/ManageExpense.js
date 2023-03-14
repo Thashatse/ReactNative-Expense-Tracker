@@ -19,11 +19,21 @@ function ManageExpense({ route, navigation }) {
     );
   });
 
-  function saveHandler() {}
+  function saveHandler() {
+    closeModal();
+  }
 
-  function cancelHandler() {}
+  function cancelHandler() {
+    closeModal();
+  }
 
-  function deleteExpenseHandler() {}
+  function deleteExpenseHandler() {
+    closeModal();
+  }
+
+  function closeModal() {
+    navigation.goBack();
+  }
 
   return (
     <View style={styles.container}>
@@ -31,7 +41,9 @@ function ManageExpense({ route, navigation }) {
         <Button mode="flat" onPress={cancelHandler} style={styles.button}>
           Cancel
         </Button>
-        <Button onPress={saveHandler}  style={styles.button}>{isEditing ? "Update" : "Add"}</Button>
+        <Button onPress={saveHandler} style={styles.button}>
+          {isEditing ? "Update" : "Add"}
+        </Button>
       </View>
       {isEditing && (
         <View style={styles.deleteContainer}>
@@ -73,5 +85,5 @@ const styles = StyleSheet.create({
   button: {
     minWidth: 120,
     marginHorizontal: 8,
-  }
+  },
 });
