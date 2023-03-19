@@ -10,6 +10,7 @@ function AllExpenses() {
     <ExpensesOutput
       expenses={expenseCtx.expenses}
       expensesPeriodName={"Total"}
+      fallbackText={'No expenses'}
     />
   );
 }

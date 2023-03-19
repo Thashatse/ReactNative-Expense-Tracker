@@ -14,7 +14,7 @@ function RecentExpenses() {
     // console.log(expense.id.toString());
     // console.log(expense.date.toString());
     var result = expense.date > date7DaysAgo;
-    console.log(result.toString());
+    // console.log(result.toString());
     return result;
   });
 
@@ -22,6 +22,7 @@ function RecentExpenses() {
     <ExpensesOutput
       expenses={recentExpenses}
       expensesPeriodName={"Last 7 days"}
+       fallbackText={'No expenses in the past 7 days'}
     />
   );
 }

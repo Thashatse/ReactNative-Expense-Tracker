@@ -1,33 +1,49 @@
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Button from "../components/UI/button";
 //Components
 import IconButton from "../components/UI/IconButton";
 //consts
 import { GlobalStyles } from "../constants/styles";
+//store
+import { ExpensesContext } from "../store/expenses-context";
 
 function ManageExpense({ route, navigation }) {
+  const expensesCtx = useContext(ExpensesContext);
+
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
 
-  useLayoutEffect(() => {
-    navigation.setOptions(
-      {
-        title: isEditing ? "Edit Expense" : "Add Expense",
-      },
-      [navigation, isEditing]
-    );
-  });
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: isEditing ? 'Edit Expense' : 'Add Expense',
+    });
+  }, [navigation, isEditing]);
+
+  function deleteExpenseHandler() {
+    expensesCtx.deleteExpense(editedExpenseId);
+    closeModal();
+  }
+  
   function saveHandler() {
+    var object = {
+      description: 'TEST - ' + (isEditing ? 'EDIT' : 'ADD'),
+      amount: 83.78,
+      date: isEditing ? new Date('2023-03-21') : new Date(),
+    };
+
+    if(isEditing){
+      expensesCtx.updateExpense(editedExpenseId, object);
+    }
+    else {
+      expensesCtx.addExpense(object);
+    }
+
     closeModal();
   }
 
   function cancelHandler() {
-    closeModal();
-  }
-
-  function deleteExpenseHandler() {
     closeModal();
   }
 
@@ -51,7 +67,7 @@ function ManageExpense({ route, navigation }) {
             icon="trash"
             color={GlobalStyles.colors.error500}
             size={36}
-            onPressed={deleteExpenseHandler}
+            onPress={deleteExpenseHandler}
           />
         </View>
       )}
