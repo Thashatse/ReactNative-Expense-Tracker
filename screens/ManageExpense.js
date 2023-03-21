@@ -15,10 +15,13 @@ function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
 
+  const selectedExpense = expensesCtx.expenses.find(
+    (expense) => expense.id === editedExpenseId
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: isEditing ? 'Edit Expense' : 'Add Expense',
+      title: isEditing ? "Edit Expense" : "Add Expense",
     });
   }, [navigation, isEditing]);
 
@@ -26,19 +29,12 @@ function ManageExpense({ route, navigation }) {
     expensesCtx.deleteExpense(editedExpenseId);
     closeModal();
   }
-  
-  function saveHandler() {
-    var object = {
-      description: 'TEST - ' + (isEditing ? 'EDIT' : 'ADD'),
-      amount: 83.78,
-      date: isEditing ? new Date('2023-03-21') : new Date(),
-    };
 
-    if(isEditing){
-      expensesCtx.updateExpense(editedExpenseId, object);
-    }
-    else {
-      expensesCtx.addExpense(object);
+  function saveHandler(expenseData) {
+    if (isEditing) {
+      expensesCtx.updateExpense(editedExpenseId, expenseData);
+    } else {
+      expensesCtx.addExpense(expenseData);
     }
 
     closeModal();
@@ -54,15 +50,12 @@ function ManageExpense({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <ExpenseForm/>
-      <View style={styles.buttonContainer}>
-        <Button mode="flat" onPress={cancelHandler} style={styles.button}>
-          Cancel
-        </Button>
-        <Button onPress={saveHandler} style={styles.button}>
-          {isEditing ? "Update" : "Add"}
-        </Button>
-      </View>
+      <ExpenseForm
+        onCancel={cancelHandler}
+        onSubmit={saveHandler}
+        submitButtonLabel={isEditing ? "Update" : "Add"}
+        defaultValues={selectedExpense}
+      />
       {isEditing && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -92,16 +85,5 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary200,
     alignItems: "center",
-  },
-
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  button: {
-    minWidth: 120,
-    marginHorizontal: 8,
   },
 });
