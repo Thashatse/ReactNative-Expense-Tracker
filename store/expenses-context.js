@@ -1,52 +1,8 @@
-import { createContext, useReducer } from 'react';
-
-const DUMMY_EXPENSE = [
-  {
-    id: "e1",
-    description: "Groceries",
-    amount: 750.59,
-    date: new Date("2023-02-13"),
-  },
-  {
-    id: "e2",
-    description: "Take Out",
-    amount: 101.01,
-    date: new Date("2023-03-13"),
-  },
-  {
-    id: "e3",
-    description: "Bike Repair",
-    amount: 1989,
-    date: new Date("2023-03-08"),
-  },
-  {
-    id: "e4",
-    description: "Drinks",
-    amount: 205,
-    date: new Date("2023-03-01"),
-  },
-  {
-    id: "e5",
-    description: "Groceries",
-    amount: 750.59,
-    date: new Date("2023-03-19"),
-  },
-  {
-    id: "e6",
-    description: "Take Out",
-    amount: 101.01,
-    date: new Date("2023-03-18"),
-  },
-  {
-    id: "e7",
-    description: "Personal Care",
-    amount: 205,
-    date: new Date("2023-03-15"),
-  },
-];
+import { createContext, useReducer } from "react";
 
 export const ExpensesContext = createContext({
   expenses: [],
+  setExpenses: (expenses) => {},
   addExpense: ({ description, amount, date }) => {},
   deleteExpense: (id) => {},
   updateExpense: (id, { description, amount, date }) => {},
@@ -56,6 +12,8 @@ function expensesReducer(state, action) {
   // console.log('state: ' + state);
 
   switch (action.type) {
+    case "SET":
+      return action.payload;
     case "ADD":
       const id = new Date().toString() + Math.random().toString();
       return [{ ...action.payload, id: id }, ...state];
@@ -84,7 +42,11 @@ function expensesReducer(state, action) {
 }
 
 function ExpensesContextProvider({ children }) {
-  const [expensesState, dispatch] = useReducer(expensesReducer, DUMMY_EXPENSE);
+  const [expensesState, dispatch] = useReducer(expensesReducer, []);
+
+  function setExpenses(expense) {
+    dispatch({ type: "SET", payload: expense });
+  }
 
   function addExpense(expenseData) {
     dispatch({ type: "ADD", payload: expenseData });
@@ -100,6 +62,7 @@ function ExpensesContextProvider({ children }) {
 
   const value = {
     expenses: expensesState,
+    setExpenses: setExpenses,
     addExpense: addExpense,
     deleteExpense: deleteExpense,
     updateExpense: updateExpense,
