@@ -13,10 +13,10 @@ function expensesReducer(state, action) {
 
   switch (action.type) {
     case "SET":
-      return action.payload;
+      var orderedData = action.payload.reverse();
+      return orderedData;
     case "ADD":
-      const id = new Date().toString() + Math.random().toString();
-      return [{ ...action.payload, id: id }, ...state];
+      return [action.payload, ...state];
     case "UPDATE":
       const updatableExpenseIndex = state.findIndex(
         (expense) => expense.id === action.payload.id
@@ -27,13 +27,7 @@ function expensesReducer(state, action) {
       updatedExpenses[updatableExpenseIndex] = updatedExpense;
       return updatedExpenses;
     case "DELETE":
-      // console.log('Start: ' + action.type);
-      // console.log('action.payload: ' + action.payload);
-
       return state.filter((expense) => {
-        // console.log('expense.id: ' + expense.id);
-        // console.log('action.payload: ' + action.payload);
-        // console.log('expense.id !== action.payload: ' + expense.id !== action.payload);
         return expense.id !== action.payload;
       });
     default:
