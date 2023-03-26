@@ -1,6 +1,7 @@
 import { useContext, useLayoutEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import ExpenseForm from "../components/ManageExpens/ExpenseForm";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 //Components
 import IconButton from "../components/UI/IconButton";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
@@ -12,6 +13,7 @@ import { deleteExpense, storeExpense, updateExpense } from "../util/http";
 
 function ManageExpense({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const expensesCtx = useContext(ExpensesContext);
 
   const editedExpenseId = route.params?.expenseId;
@@ -29,24 +31,39 @@ function ManageExpense({ route, navigation }) {
 
   async function deleteExpenseHandler() {
     setIsLoading(true);
-    expensesCtx.deleteExpense(editedExpenseId);
-    await deleteExpense(editedExpenseId);
+    try{
+      await deleteExpense(editedExpenseId);
+      expensesCtx.deleteExpense(editedExpenseId);
+      closeModal();
+    }
+    catch{
+      setError('The expense could not be deleted');
+    }
     setIsLoading(false);
-    closeModal();
   }
 
   async function saveHandler(expenseData) {
     setIsLoading(true);
     if (isEditing) {
-      expensesCtx.updateExpense(editedExpenseId, expenseData);
-      await updateExpense(editedExpenseId, expenseData);
+      try{
+        await updateExpense(editedExpenseId, expenseData);
+        expensesCtx.updateExpense(editedExpenseId, expenseData);
+        closeModal();
+      }
+      catch{
+        setError('The expense could not be updated');
+      }
     } else {
-      const id = await storeExpense(expenseData);
-      expensesCtx.addExpense({ ...expenseData, id: id });
+      try{
+        const id = await storeExpense(expenseData);
+        expensesCtx.addExpense({ ...expenseData, id: id });
+        closeModal();
+      }
+      catch{
+        setError('The expense could not be added');
+      }
     }
     setIsLoading(false);
-
-    closeModal();
   }
 
   function cancelHandler() {
@@ -55,6 +72,14 @@ function ManageExpense({ route, navigation }) {
 
   function closeModal() {
     navigation.goBack();
+  }
+
+  function errorHandler() {
+    setError(null);
+  }
+
+  if(error && !isLoading){
+    return <ErrorOverlay message={error} onConfirm={errorHandler} />
   }
 
   if (isLoading) {
