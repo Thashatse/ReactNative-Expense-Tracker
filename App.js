@@ -1,65 +1,26 @@
 //IMports
-import { StatusBar } from "expo-status-bar";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
+import { StatusBar } from "react-native";
 //Screens
-import ManageExpense from "./screens/ManageExpense";
-import AllExpenses from "./screens/AllExpenses";
-import RecentExpenses from "./screens/RecentExpense";
-//Consts
-import { GlobalStyles } from "./constants/styles";
-import IconButton from "./components/UI/IconButton";
-//store
-import ExpensesContextProvider from "./store/expenses-context";
+import { AuthStack } from "./screens/StartUp/AuthStack";
+import { AuthenticatedStack } from "./screens/StartUp/AuthenticatedStack";
+//Store
+import AuthContextProvider, { AuthContext } from "./store/auth-context";
+import { useContext } from "react";
+import { NavigationContainer } from "@react-navigation/native";
 
-const Stack = createNativeStackNavigator();
-const BottomTabs = createBottomTabNavigator();
+export const Stack = createNativeStackNavigator();
 
-function ExpensesOverview() {
+function Navigation() {
+  const authCtx = useContext(AuthContext);
+
   return (
-    <BottomTabs.Navigator
-      screenOptions={({ navigation }) => ({
-        headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-        headerTintColor: "white",
-        tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-        tabBarActiveTintColor: GlobalStyles.colors.accent500,
-        headerRight: ({ tintColor }) => (
-          <IconButton
-            icon="add"
-            size={24}
-            color={tintColor}
-            onPress={() => {
-              navigation.navigate("MangeExpense");
-            }}
-          />
-        ),
-      })}
-    >
-      <BottomTabs.Screen
-        name="RecentExpenses"
-        component={RecentExpenses}
-        options={{
-          title: "Recent Expenses",
-          tabBarLabel: "Recent",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="hourglass" size={size} color={color} />
-          ),
-        }}
-      />
-      <BottomTabs.Screen
-        name="AllExpenses"
-        component={AllExpenses}
-        options={{
-          title: "All Expenses",
-          tabBarLabel: "All",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
-          ),
-        }}
-      />
-    </BottomTabs.Navigator>
+    <>
+      {!authCtx.isAuthenticated
+        ? AuthStack(Stack)
+        : AuthenticatedStack(Stack)}
+    </>
   );
 }
 
@@ -67,29 +28,11 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
-      <ExpensesContextProvider>
+      <AuthContextProvider>
         <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-              headerTintColor: "white",
-            }}
-          >
-            <Stack.Screen
-              name="ExpensesOverview"
-              component={ExpensesOverview}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="MangeExpense"
-              component={ManageExpense}
-              options={{
-                presentation: "modal",
-              }}
-            />
-          </Stack.Navigator>
+          <Navigation />
         </NavigationContainer>
-      </ExpensesContextProvider>
+      </AuthContextProvider>
     </>
   );
 }
