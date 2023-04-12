@@ -1,7 +1,7 @@
 import axios from "axios";
+import { baseURLSecret } from "./appSecrets";
 
-const baseURL =
-  "https://react-expensetracker-5ab8a-default-rtdb.europe-west1.firebasedatabase.app/";
+baseURL = baseURLSecret; //[YOUR Base firebase database uri here e.g: https://react-expensetracker.europe-west1.firebasedatabase.app/]
 const expenseEndpoint = "expenses";
 const expenseDataFormat = ".json";
 

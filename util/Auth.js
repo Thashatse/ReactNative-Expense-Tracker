@@ -1,9 +1,10 @@
 import axios from "axios";
+import { authKeySecret } from "./appSecrets";
 
 const baseURL = "https://identitytoolkit.googleapis.com/v1/accounts:";
 const signInEndPoint = "signInWithPassword?key=";
 const signUpEndPoint = "signUp?key=";
-const key = "AIzaSyBMUz8zqJmquKdVWgctAS7zvrBW2uGlic4";
+key = authKeySecret; //[YOUR Base firebase database key here]
 
 async function authenticate(mode, email, password)
 {
