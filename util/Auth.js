@@ -6,19 +6,26 @@ const signInEndPoint = "signInWithPassword?key=";
 const signUpEndPoint = "signUp?key=";
 key = authKeySecret; //[YOUR Base firebase database key here]
 
-async function authenticate(mode, email, password)
-{
-  const url = baseURL + (mode == "signIn" ? signInEndPoint : (mode == "signUp" ? signUpEndPoint : "" )) + key;
-  
+async function authenticate(mode, email, password) {
+  const url =
+    baseURL +
+    (mode == "signIn"
+      ? signInEndPoint
+      : mode == "signUp"
+      ? signUpEndPoint
+      : "") +
+    key;
+
   var response = await axios.post(url, {
     email: email,
     password: password,
     returnSecureToken: true,
   });
 
-  console.log(response.data);
   const token = response.data.idToken;
-  return token;
+  const localId = response.data.localId;
+  var dataToReturn = [localId, token];
+  return dataToReturn;
 }
 
 export function signInUser(email, password) {

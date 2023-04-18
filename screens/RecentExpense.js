@@ -1,22 +1,26 @@
 import ExpensesOutput from "../components/ExpensesOutput/ExpensesOutput";
 import { getDateMinusDays } from "../util/date";
 import { useContext, useEffect, useState } from "react";
-import { ExpensesContext } from "../store/expenses-context";
 import { fetchExpenses } from "../util/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
+//stores
+import { AuthContext } from "../store/auth-context";
+import { ExpensesContext } from "../store/expenses-context";
 
 function RecentExpenses() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
+  
   const expenseCtx = useContext(ExpensesContext);
+  const authCtx = useContext(AuthContext);
 
   useEffect(() => {
     async function getExpenses() {
       setIsLoading(true);
       try
       {
-        const expenses = await fetchExpenses();
+        const expenses = await fetchExpenses(authCtx.getUserID(), authCtx.getToken());
         expenseCtx.setExpenses(expenses);
       }
       catch (error)

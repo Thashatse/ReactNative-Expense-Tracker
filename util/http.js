@@ -5,9 +5,11 @@ baseURL = baseURLSecret; //[YOUR Base firebase database uri here e.g: https://re
 const expenseEndpoint = "expenses";
 const expenseDataFormat = ".json";
 
-export async function fetchExpenses() {
+export async function fetchExpenses(userID, token) {
+  console.log("fetchExpenses: " + token);
+
   const response = await axios.get(
-    baseURL + expenseEndpoint + expenseDataFormat
+    baseURL + expenseEndpoint + "/" + userID + expenseDataFormat + "?auth=" + token
   );
 
   const expenses = [];
@@ -25,22 +27,28 @@ export async function fetchExpenses() {
   return expenses;
 }
 
-export async function storeExpense(expenseData) {
+export async function storeExpense(expenseData, userID, token) {
+  console.log("storeExpense: " + token);
+
   const response = await axios.post(
-    baseURL + expenseEndpoint + expenseDataFormat,
+    baseURL + expenseEndpoint + "/" + userID + expenseDataFormat + "?auth=" + token,
     expenseData
   );
   const id = response.data.name;
   return id;
 }
 
-export function updateExpense(id, expenseData) {
+export function updateExpense(id, expenseData, userID, token) {
+  console.log("updateExpense: " + token);
+
   return axios.put(
-    baseURL + expenseEndpoint + `/${id}` + expenseDataFormat,
+    baseURL + expenseEndpoint + "/" + userID + `/${id}` + expenseDataFormat + "?auth=" + token,
     expenseData
   );
 }
 
-export function deleteExpense(id) {
-  return axios.delete(baseURL + expenseEndpoint + `/${id}` + expenseDataFormat);
+export function deleteExpense(id, userID, token) {
+  console.log("deleteExpense: " + token);
+  
+  return axios.delete(baseURL + expenseEndpoint + "/" + userID + `/${id}` + expenseDataFormat + "?auth=" + token);
 }

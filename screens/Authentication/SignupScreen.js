@@ -15,8 +15,8 @@ function SignupScreen() {
   async function signupHandler({ email, password }) {
     setIsAuthentication(true);
     try {
-      const token = await createUser(email, password);
-      authCtx.authenticate(token);
+      const userAuthDetails = await createUser(email, password);
+      authCtx.authenticate(userAuthDetails);
     } catch (error) {
       Alert.alert(
         "Authentication Failed",

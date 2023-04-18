@@ -8,12 +8,15 @@ import LoadingOverlay from "../components/UI/LoadingOverlay";
 //consts
 import { GlobalStyles } from "../constants/styles";
 //store
+import { AuthContext } from "../store/auth-context";
 import { ExpensesContext } from "../store/expenses-context";
 import { deleteExpense, storeExpense, updateExpense } from "../util/http";
 
 function ManageExpense({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+
+  const authCtx = useContext(AuthContext);
   const expensesCtx = useContext(ExpensesContext);
 
   const editedExpenseId = route.params?.expenseId;
@@ -32,7 +35,7 @@ function ManageExpense({ route, navigation }) {
   async function deleteExpenseHandler() {
     setIsLoading(true);
     try{
-      await deleteExpense(editedExpenseId);
+      await deleteExpense(editedExpenseId, authCtx.getUserID(), authCtx.getToken());
       expensesCtx.deleteExpense(editedExpenseId);
       closeModal();
     }
@@ -46,7 +49,7 @@ function ManageExpense({ route, navigation }) {
     setIsLoading(true);
     if (isEditing) {
       try{
-        await updateExpense(editedExpenseId, expenseData);
+        await updateExpense(editedExpenseId, expenseData, authCtx.getUserID(), authCtx.getToken());
         expensesCtx.updateExpense(editedExpenseId, expenseData);
         closeModal();
       }
@@ -55,7 +58,7 @@ function ManageExpense({ route, navigation }) {
       }
     } else {
       try{
-        const id = await storeExpense(expenseData);
+        const id = await storeExpense(expenseData, authCtx.getUserID(), authCtx.getToken());
         expensesCtx.addExpense({ ...expenseData, id: id });
         closeModal();
       }

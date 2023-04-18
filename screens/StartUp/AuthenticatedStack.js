@@ -1,6 +1,7 @@
 //Import
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
 //Screens
 import ManageExpense from "../ManageExpense";
 import RecentExpenses from "../RecentExpense";
@@ -11,10 +12,12 @@ import ExpensesContextProvider from "../../store/expenses-context";
 import { GlobalStyles } from "../../constants/styles";
 //components
 import IconButton from "../../components/UI/IconButton";
+import { AuthContext } from "../../store/auth-context";
 
 /*START: Authenticated*/
 export function ExpensesOverview() {
   const BottomTabs = createBottomTabNavigator();
+  const authCtx = useContext(AuthContext);
 
   return (
     <BottomTabs.Navigator
@@ -30,6 +33,17 @@ export function ExpensesOverview() {
             color={tintColor}
             onPress={() => {
               navigation.navigate("MangeExpense");
+            }}
+          />
+        ),
+        headerLeft: ({ tintColor }) => (
+          <IconButton
+            icon="exit"
+            size={24}
+            color={tintColor}
+            onPress={() => {
+              console.log("Logging Out");
+              authCtx.logout();
             }}
           />
         ),

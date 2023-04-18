@@ -16,8 +16,8 @@ function LoginScreen() {
   async function signInHandler({ email, password }) {
     setIsAuthentication(true);
     try {
-      const token = await signInUser(email, password);
-      authCtx.authenticate(token);
+      const userAuthDetails = await signInUser(email, password);
+      authCtx.authenticate(userAuthDetails);
     } catch (error) {
       Alert.alert("Authentication Failed", "Invalid email or password");
       setIsAuthentication(false);
