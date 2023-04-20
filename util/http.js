@@ -6,8 +6,6 @@ const expenseEndpoint = "expenses";
 const expenseDataFormat = ".json";
 
 export async function fetchExpenses(userID, token) {
-  console.log("fetchExpenses: " + token);
-
   const response = await axios.get(
     baseURL + expenseEndpoint + "/" + userID + expenseDataFormat + "?auth=" + token
   );
@@ -28,8 +26,6 @@ export async function fetchExpenses(userID, token) {
 }
 
 export async function storeExpense(expenseData, userID, token) {
-  console.log("storeExpense: " + token);
-
   const response = await axios.post(
     baseURL + expenseEndpoint + "/" + userID + expenseDataFormat + "?auth=" + token,
     expenseData
@@ -39,16 +35,12 @@ export async function storeExpense(expenseData, userID, token) {
 }
 
 export function updateExpense(id, expenseData, userID, token) {
-  console.log("updateExpense: " + token);
-
   return axios.put(
     baseURL + expenseEndpoint + "/" + userID + `/${id}` + expenseDataFormat + "?auth=" + token,
     expenseData
   );
 }
 
-export function deleteExpense(id, userID, token) {
-  console.log("deleteExpense: " + token);
-  
+export function deleteExpense(id, userID, token) {  
   return axios.delete(baseURL + expenseEndpoint + "/" + userID + `/${id}` + expenseDataFormat + "?auth=" + token);
 }

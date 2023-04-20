@@ -42,7 +42,6 @@ export function ExpensesOverview() {
             size={24}
             color={tintColor}
             onPress={() => {
-              console.log("Logging Out");
               authCtx.logout();
             }}
           />

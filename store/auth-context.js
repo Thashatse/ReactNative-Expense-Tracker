@@ -20,12 +20,10 @@ function AuthContextProvider({ children }) {
   }
 
   function getToken() {
-    console.log("AuthContext, Get Token " + AuthContext);
     return authToken;
   }
 
   function getUserID() {
-    console.log("AuthContext, Get Auth User ID " + AuthContext);
     return userAuthID;
   }
 

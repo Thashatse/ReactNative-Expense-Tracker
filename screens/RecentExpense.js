@@ -45,7 +45,6 @@ function RecentExpenses() {
     return <ErrorOverlay message={error} onConfirm={errorHandler} />
   }
 
-  console.log(new Date() + " - " + expenseCtx.expenses);
   const recentExpenses = expenseCtx.expenses.filter((expense) => {
     const today = new Date();
     const date7DaysAgo = getDateMinusDays(today, 7);

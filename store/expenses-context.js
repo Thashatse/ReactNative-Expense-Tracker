@@ -9,8 +9,6 @@ export const ExpensesContext = createContext({
 });
 
 function expensesReducer(state, action) {
-  // console.log('state: ' + state);
-
   switch (action.type) {
     case "SET":
       var orderedData = action.payload.reverse();
