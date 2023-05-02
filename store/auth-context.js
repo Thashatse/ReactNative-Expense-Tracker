@@ -1,10 +1,11 @@
-import { createContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext({
   userID: '',
   token: '',
   isAuthenticated: false,
-  authenticate: (token) => {},
+  authenticate: (userID, userToken) => {},
   getToken: () => {},
   getUserID: () => {},
   logout: () => {},
@@ -14,9 +15,12 @@ function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
   const [userAuthID, setUserAuthID] = useState();
 
-  function authenticate(userDetails) {
-    setUserAuthID(userDetails[0]);
-    setAuthToken(userDetails[1]);
+  function authenticate(userID, userToken) {
+    setAuthToken(userToken);
+    AsyncStorage.setItem('userToken', userToken);
+
+    setUserAuthID(userID);
+    AsyncStorage.setItem('userID', userID);
   }
 
   function getToken() {
@@ -29,7 +33,10 @@ function AuthContextProvider({ children }) {
 
   function logout() {
     setAuthToken(null);
+    AsyncStorage.removeItem('userToken');
+    
     setUserAuthID(null);
+    AsyncStorage.removeItem('userID');
   }
 
   const value = {

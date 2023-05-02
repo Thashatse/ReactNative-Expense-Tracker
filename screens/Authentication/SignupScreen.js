@@ -16,7 +16,7 @@ function SignupScreen() {
     setIsAuthentication(true);
     try {
       const userAuthDetails = await createUser(email, password);
-      authCtx.authenticate(userAuthDetails);
+      authCtx.authenticate(userAuthDetails[0], userAuthDetails[1]);
     } catch (error) {
       Alert.alert(
         "Authentication Failed",

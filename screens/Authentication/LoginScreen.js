@@ -17,7 +17,7 @@ function LoginScreen() {
     setIsAuthentication(true);
     try {
       const userAuthDetails = await signInUser(email, password);
-      authCtx.authenticate(userAuthDetails);
+      authCtx.authenticate(userAuthDetails[0], userAuthDetails[1]);
     } catch (error) {
       Alert.alert("Authentication Failed", "Invalid email or password");
       setIsAuthentication(false);
